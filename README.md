@@ -1,6 +1,12 @@
-# vue-test
+# vue-slider
 
-> A Vue.js project
+> Vue仿QQ左滑删除组件
+
+## 具体项目如下图
+
+![slider.gif](https://upload-images.jianshu.io/upload_images/6633377-23f94155957cfd91.gif?imageMogr2/auto-orient/strip)
+
+如果有疑问，可以参考我的这篇[文章](https://juejin.im/post/5aa3771af265da23771904d4)
 
 ## Build Setup
 
