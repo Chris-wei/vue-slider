@@ -82,7 +82,7 @@
 			},
             //判断当前是否有滑块处于滑动状态
             checkSlide(){
-				return this.activeSwiper > -1 ? true : false;
+				return this.activeSwiper > -1;
             },
 			//删除
 			deleteItem(e){
