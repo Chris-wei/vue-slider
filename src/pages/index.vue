@@ -2,8 +2,8 @@
     <div class="container">
         <div class="page-title">滑动组件</div>
         <ul>
-            <li class="list-item " v-for="(item,index) in list " data-type="0">
-                <div class="list-box" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">
+            <li class="list-item " v-for="(item,index) in list " :data-type="activeSwiper == index ? 1 : 0">
+                <div class="list-box" @touchstart.capture="touchStart" :data-index="index" @touchend.capture="touchEnd" @click="skip">
                     <img class="list-img" :src="item.imgUrl" alt="">
                     <div class="list-content">
                         <p class="title">{{item.title}}</p>
@@ -48,15 +48,16 @@
 						time : '昨天'
                     }
 				],
-				startX : 0 ,
-				endX : 0 ,
+				startX : 0,
+				endX : 0,
+                activeSwiper: -1, //当前活动的滑块
 			}
 		},
 		methods : {
 			//跳转
 			skip(){
 				if( this.checkSlide() ){
-					this.restSlide();
+					this.activeSwiper = -1;
                 }else{
 					alert('You click the slide!')
                 }
@@ -67,18 +68,13 @@
 			},
 			//滑动结束
 			touchEnd(e){
-
-				let parentElement = e.currentTarget.parentElement;
 				this.endX = e.changedTouches[0].clientX;
-
-				if( parentElement.dataset.type == 0 && this.startX - this.endX > 30  ){
-					this.restSlide();
-					parentElement.dataset.type = 1;
+				if(this.startX - this.endX > 30){
+					this.activeSwiper = e.currentTarget.dataset.index;
 				}
 
-				if( parentElement.dataset.type == 1 && this.startX - this.endX < -30 ){
-					this.restSlide();
-					parentElement.dataset.type = 0;
+				if(this.startX - this.endX < -30){
+					this.activeSwiper = -1;
 				}
 
 				this.startX = 0;
@@ -86,27 +82,12 @@
 			},
             //判断当前是否有滑块处于滑动状态
             checkSlide(){
-				let listItems = document.querySelectorAll('.list-item');
-
-				for( let i = 0 ; i < listItems.length ; i++){
-					if( listItems[i].dataset.type == 1 ) {
-						return true;
-                    }
-				}
-				return false;
+				return this.activeSwiper > -1 ? true : false;
             },
-			//一次只能滑动一个
-			restSlide(){
-				let listItems = document.querySelectorAll('.list-item');
-
-				for( let i = 0 ; i < listItems.length ; i++){
-					listItems[i].dataset.type = 0;
-				}
-			},
 			//删除
 			deleteItem(e){
 				let index = e.currentTarget.dataset.index;
-				this.restSlide();
+				this.activeSwiper = -1;
 				this.list.splice(index,1);
 			}
 		}
